@@ -35,9 +35,9 @@ class Tasks:
     top_process : dict[Process_Info] = field(init=False)
 
     def __post_init__(self):
-        self.cpu_count = cpu_count()
         self.top_process = dict()
         self.os_type = 'windows' if 'windows' in platform() else 'linux'
+        self.cpu_count = cpu_count() if self.os_type=='windows' else 1
 
     def get_process_list(self):
         self.process_list = list()

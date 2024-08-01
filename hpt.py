@@ -2,7 +2,6 @@ from time import sleep
 from os import system
 from pprint import pprint
 from argparse import ArgumentParser
-from platform import platform
 from modules.proc import Tasks
 
 
