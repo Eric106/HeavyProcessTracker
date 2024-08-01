@@ -1,5 +1,6 @@
 from psutil import process_iter, Process, cpu_count
 from dataclasses import dataclass, field
+from datetime import datetime
 from pandas import DataFrame
 import tabulate
 
@@ -9,12 +10,14 @@ class Process_Info:
     name : str
     cpu_percent : float
     memory_percent : float
+    dt: str
 
-    def __init__(self, process: Process, cpu_count:int) -> None:
+    def __init__(self, process: Process, cpu_count:int, dt: str) -> None:
         self.pid = process.info['pid']
         self.name = process.info['name']
         self.cpu_percent = process.info['cpu_percent']/cpu_count
         self.memory_percent = process.memory_percent()
+        self.dt = dt
 
     def __repr__(self) -> str:
         return f"PID: {self.pid}, NAME: {self.name}, CPU%: {self.cpu_percent:.2f}, MEM%: {self.memory_percent:.2f}"
@@ -35,8 +38,11 @@ class Tasks:
 
     def get_process_list(self):
         self.process_list = list()
+        dt = datetime.now()
         for process in process_iter(['pid', 'name', 'cpu_percent', 'memory_info']):
-            self.process_list.append(Process_Info(process=process, cpu_count=self.cpu_count))
+            self.process_list.append(Process_Info(process=process,
+                                                  cpu_count=self.cpu_count,
+                                                  dt=dt.strftime('%Y-%m-%d %H:%M:%S')))
         if self.process_list[0].pid == 0: self.process_list.pop(0)
 
     def sort_process_list(self):
