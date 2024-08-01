@@ -1,6 +1,8 @@
-# conda create -n hpt python==3.11.* -y ; conda activate bpt ; pip install -r requirements.txt
+# conda create -n hpt python==3.11.* -y ; conda activate hpt ; pip install -r requirements.txt
 
 psutil
+pandas
+tabulate
 pyinstaller
 pylint
 autopep8

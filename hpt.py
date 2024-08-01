@@ -11,6 +11,7 @@ def main():
     parser.add_argument('-cpu',dest='cpu',type=float)
     parser.add_argument('-mem',dest='mem',type=float)
     parser.add_argument('-sleep',dest='sleep',type=int)
+    parser.add_argument('-csv',dest='csv',type=str)
     args = parser.parse_args()
     if args.sleep == None:
         sleep_time = 3
@@ -25,13 +26,18 @@ def main():
             tasks.filter_process_list(name=args.name,
                                     cpu_percent=args.cpu,
                                     memory_percent=args.mem)
+            print('='*50)
+            print('Process list read: ')
             pprint(tasks.process_list)
             print('*'*50)
-            print(f'Last process info: ')
-            pprint(tasks.top_process_names)
+            print('*'*50)
+            print(f'Last MAX process info: ')
+            print(tasks.top_process_to_frame().to_markdown(index=False))
+            sleep(sleep_time)
         except KeyboardInterrupt:
             start_scan = False
-        sleep(sleep_time)
+    if args.csv:
+        tasks.top_process_to_frame().to_csv(args.csv, index=False)
 
 if __name__ == "__main__":
     main()
