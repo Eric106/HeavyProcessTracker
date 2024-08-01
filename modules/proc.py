@@ -64,8 +64,15 @@ class Tasks:
             process_is_in_top = process.pid in self.top_process.keys()
             last_top_cpu = self.top_process[process.pid].cpu_percent if process_is_in_top else 0.0 
             last_top_mem = self.top_process[process.pid].memory_percent if process_is_in_top else 0.0
-            if last_top_cpu < process.cpu_percent and last_top_mem < process.memory_percent:
-                self.top_process[process.pid] = process
+            if cpu_percent and memory_percent:
+                if last_top_cpu < process.cpu_percent and last_top_mem < process.memory_percent:
+                    self.top_process[process.pid] = process
+            elif cpu_percent:
+                if last_top_cpu < process.cpu_percent:
+                    self.top_process[process.pid] = process
+            elif memory_percent:
+                if last_top_mem < process.memory_percent:
+                    self.top_process[process.pid] = process
             
     def top_process_to_list(self) -> list[Process_Info]:
         return list(self.top_process.values())
