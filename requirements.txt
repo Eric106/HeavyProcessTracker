@@ -1,0 +1,8 @@
+# conda create -n hpt python==3.11.* -y ; conda activate bpt ; pip install -r requirements.txt
+
+psutil
+pyinstaller
+pylint
+autopep8
+ipython
+
