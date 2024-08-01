@@ -1,5 +1,6 @@
 from psutil import process_iter, Process, cpu_count
 from dataclasses import dataclass, field
+from platform import platform
 from datetime import datetime
 from pandas import DataFrame
 import tabulate
@@ -28,6 +29,7 @@ class Process_Info:
 
 @dataclass(frozen=False)
 class Tasks:
+    os_type : str = field(init=False)
     cpu_count : int = field(init=False)
     process_list : list[Process_Info] = field(init=False)
     top_process : dict[Process_Info] = field(init=False)
@@ -35,6 +37,7 @@ class Tasks:
     def __post_init__(self):
         self.cpu_count = cpu_count()
         self.top_process = dict()
+        self.os_type = 'windows' if 'windows' in platform() else 'linux'
 
     def get_process_list(self):
         self.process_list = list()

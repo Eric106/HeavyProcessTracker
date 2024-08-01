@@ -2,6 +2,7 @@ from time import sleep
 from os import system
 from pprint import pprint
 from argparse import ArgumentParser
+from platform import platform
 from modules.proc import Tasks
 
 
@@ -22,7 +23,10 @@ def main():
     while start_scan:
         try:
             tasks.get_process_list()
-            system('cls')
+            if tasks.os_type == 'windows': 
+                system('cls')
+            else:
+                system('clear')
             tasks.filter_process_list(name=args.name,
                                     cpu_percent=args.cpu,
                                     memory_percent=args.mem)
