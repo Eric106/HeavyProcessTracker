@@ -36,7 +36,7 @@ class Tasks:
 
     def __post_init__(self):
         self.top_process = dict()
-        self.os_type = 'windows' if 'windows' in platform() else 'linux'
+        self.os_type = 'windows' if 'windows' in platform().lower() else 'linux'
         self.cpu_count = cpu_count() if self.os_type=='windows' else 1
 
     def get_process_list(self):
