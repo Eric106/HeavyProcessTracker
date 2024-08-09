@@ -32,12 +32,18 @@ class Tasks:
     os_type : str = field(init=False)
     cpu_count : int = field(init=False)
     process_list : list[Process_Info] = field(init=False)
-    top_process : dict[Process_Info] = field(init=False)
+    top_process : DataFrame = field(init=False)
 
     def __post_init__(self):
-        self.top_process = dict()
         self.os_type = 'windows' if 'windows' in platform().lower() else 'linux'
         self.cpu_count = cpu_count() if self.os_type=='windows' else 1
+        self.get_process_list()
+        self.top_process = DataFrame({key:list() for key in self.process_list[0].to_dict().keys()})
+        self.top_process.set_index(keys='pid',inplace=True)
+        self.top_process = self.top_process.astype({
+            'name':'str','cpu_percent':'float64',
+            'memory_percent':'float64','dt':'str'
+        })
 
     def get_process_list(self):
         self.process_list = list()
@@ -61,31 +67,20 @@ class Tasks:
             self.process_list = list(filter(lambda process: process.memory_percent >= memory_percent, self.process_list))
 
         for process in self.process_list:
-            process_is_in_top = process.pid in self.top_process.keys()
-            last_top_cpu = self.top_process[process.pid].cpu_percent if process_is_in_top else 0.0 
-            last_top_mem = self.top_process[process.pid].memory_percent if process_is_in_top else 0.0
+            process_is_in_top = process.pid in self.top_process.index
+            last_top_cpu = self.top_process.at[process.pid,'cpu_percent'] if process_is_in_top else 0.0 
+            last_top_mem = self.top_process.at[process.pid,'memory_percent'] if process_is_in_top else 0.0
+            update_data : bool = False
             if cpu_percent and memory_percent:
-                if last_top_cpu < process.cpu_percent and last_top_mem < process.memory_percent:
-                    self.top_process[process.pid] = process
+                update_data = last_top_cpu < process.cpu_percent and last_top_mem < process.memory_percent
             elif cpu_percent:
-                if last_top_cpu < process.cpu_percent:
-                    self.top_process[process.pid] = process
+                update_data = last_top_cpu < process.cpu_percent
             elif memory_percent:
-                if last_top_mem < process.memory_percent:
-                    self.top_process[process.pid] = process
-            
-    def top_process_to_list(self) -> list[Process_Info]:
-        return list(self.top_process.values())
+                update_data = last_top_mem < process.memory_percent
+            if update_data:
+                for col_name in self.top_process.columns:
+                    if col_name != 'pid':
+                        self.top_process.at[process.pid, col_name] = process.__getattribute__(col_name)
 
-    def top_process_to_frame(self) -> DataFrame:
-        if len(self.top_process) != 0:
-            frame_cols = list(self.top_process_to_list()[0].to_dict().keys())
-        else:
-            frame_cols = list()
-        data = {col:list() for col in frame_cols}
-        for process in self.top_process.values():
-            for key, value in process.to_dict().items():
-                data[key].append(value)
-        return DataFrame(data)
 
 
