@@ -42,7 +42,7 @@ class Tasks:
         self.top_process.set_index(keys='pid',inplace=True)
         self.top_process = self.top_process.astype({
             'name':'str','cpu_percent':'float64',
-            'memory_percent':'float64','dt':'str'
+            'memory_percent':'float64','dt':'datetime64[ms]'
         })
 
     def get_process_list(self):
@@ -82,5 +82,6 @@ class Tasks:
                     if col_name != 'pid':
                         self.top_process.at[process.pid, col_name] = process.__getattribute__(col_name)
 
-
+        self.top_process.sort_values(by=['cpu_percent','memory_percent'],inplace=True)
+        self.top_process.drop_duplicates(subset=['name'], inplace=True)
 
