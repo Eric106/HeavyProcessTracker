@@ -1,6 +1,7 @@
 from time import sleep
 from os import system, get_terminal_size
 from argparse import ArgumentParser
+from pprint import pprint
 from modules.proc import Tasks
 
 
@@ -35,7 +36,7 @@ def main():
                 start_count += 1
             print('#'*term_size)
             print('\nProcess list read: ')
-            print(tasks.process_list.to_markdown(),'\n')
+            print(tasks.process_list_to_frame().to_markdown())
             print('*'*term_size)
             print(f'Total CPU%: {tasks.cpu_usage}, MEM%: {tasks.mem_usage:.2f}')
             print('*'*term_size)
