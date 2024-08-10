@@ -52,7 +52,7 @@ class Tasks:
         self.os_type = 'windows' if 'windows' in platform().lower() else 'linux'
         self.cpu_count = cpu_count() if self.os_type=='windows' else 1
         self.cpu_usage = cpu_percent()
-        self.mem_usage = virtual_memory().available * 100 / virtual_memory().total
+        self.mem_usage = virtual_memory().percent
         self.get_process_list()
         self.top_process = DataFrame({key:list() for key in self.col_types.keys()})
         self.top_process = self.top_process.astype(self.col_types)
@@ -60,7 +60,7 @@ class Tasks:
 
     def get_process_list(self):
         self.cpu_usage = cpu_percent()
-        self.mem_usage = virtual_memory().available * 100 / virtual_memory().total
+        self.mem_usage = virtual_memory().percent
         self.process_list = list()
         dt = datetime.now()
         for process in process_iter(['pid', 'name', 'cpu_percent', 'memory_info']):
