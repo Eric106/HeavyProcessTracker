@@ -1,7 +1,6 @@
 from time import sleep
 from os import system, get_terminal_size
 from argparse import ArgumentParser
-from pprint import pprint
 from modules.proc import Tasks
 
 
