@@ -100,7 +100,7 @@ class Tasks:
                 update_data = last_top_cpu < process.cpu_percent
             elif memory_percent:
                 update_data = last_top_mem < process.memory_percent
-            if update_data:
+            if update_data and process.name not in ['hpt','htp.exe']:
                 self.top_process.loc[process.pid] = process.to_list()
 
         self.top_process.sort_values(by=['cpu_percent','memory_percent'],inplace=True)
