@@ -6,7 +6,7 @@ from modules.proc import Tasks
 
 
 def main():
-    parser = ArgumentParser(description="Bad Process Tracker")
+    parser = ArgumentParser(description="Heavy Process Tracker")
     parser.add_argument('-n',dest='name',type=str)
     parser.add_argument('-cpu',dest='cpu',type=float)
     parser.add_argument('-mem',dest='mem',type=float)
