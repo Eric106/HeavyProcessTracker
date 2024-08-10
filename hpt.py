@@ -1,6 +1,5 @@
 from time import sleep
-from os import system
-from pprint import pprint
+from os import system, get_terminal_size
 from argparse import ArgumentParser
 from modules.proc import Tasks
 
@@ -17,6 +16,7 @@ def main():
         sleep_time = 3
     else:
         sleep_time = args.sleep
+    term_size = get_terminal_size().columns
     start_scan = True
     tasks = Tasks()
     start_count : int = 0
@@ -33,12 +33,13 @@ def main():
                                         memory_percent=args.mem)
             else:
                 start_count += 1
-            print('='*50)
-            print('Process list read: ')
-            pprint(tasks.process_list)
-            print('*'*50)
-            print('*'*50)
-            print(f'Last MAX process info: ')
+            print('#'*term_size)
+            print('\nProcess list read: ')
+            print(tasks.process_list.to_markdown(),'\n')
+            print('*'*term_size)
+            print(f'Total CPU%: {tasks.cpu_usage}, MEM%: {tasks.mem_usage:.2f}')
+            print('*'*term_size)
+            print(f'\nLast MAX process info: ')
             print(tasks.top_process.to_markdown())
             sleep(sleep_time)
         except KeyboardInterrupt:
