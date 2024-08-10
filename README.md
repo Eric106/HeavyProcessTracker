@@ -4,10 +4,10 @@ Command line tool to track heavy process information
 
 ## Downloads
 - Linux binaries:
-  - [aarch64]()
+  - [aarch64](https://github.com/Eric106/HeavyProcessTracker/raw/master/dist/hpt.exe)
   - [x86_64]()
 - Windows:
-  - [x86_64 EXE]()
+  - [x86_64 EXE](https://github.com/Eric106/HeavyProcessTracker/raw/master/dist/hpt.exe)
 
 ## Usage:
 ```bash
