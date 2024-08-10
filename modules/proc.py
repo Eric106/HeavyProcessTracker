@@ -83,5 +83,5 @@ class Tasks:
                         self.top_process.at[process.pid, col_name] = process.__getattribute__(col_name)
 
         self.top_process.sort_values(by=['cpu_percent','memory_percent'],inplace=True)
-        self.top_process.drop_duplicates(subset=['name'], inplace=True)
+        self.top_process.drop_duplicates(subset=['name'],keep='last', inplace=True)
 
